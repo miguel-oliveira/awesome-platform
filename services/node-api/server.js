@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 async function getDataFromDB(res) {
   const conn = {
     user: "postgres",
-    host: known_data_instances[0].Node.Address,
+    host: known_data_instances[0].Service.Address,
     database: "test",
     password: "15931593",
     port: known_data_instances[0].Service.Port

@@ -48,6 +48,8 @@ services:
   postgres:
     image: postgres
     restart: always
+    networks:
+      - consul-network
     volumes:
       - /usr/local/var/postgres:/var/lib/postgresql/data/pgdata
     ports:
@@ -56,6 +58,17 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       PGDATA: /var/lib/postgresql/data/pgdata
+    depends_on:
+      - consul
+  postgresproxy:
+    build: ./services/postgres-proxy/
+    networks:
+      - consul-network
+    links:
+      - "consul:consul"
+      - "postgres:postgres"
+    depends_on:
+      - postgres
   # registrator:
   #   image: gliderlabs/registrator
   #   volumes:
@@ -76,3 +89,6 @@ services:
       - "3000:3000"
     links:
       - "consul:consul"
+    depends_on:
+      - consul
+      - postgresproxy
