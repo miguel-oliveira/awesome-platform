@@ -16,6 +16,35 @@ services:
       - "8500:8500"
       - "8600:8600"
       - "8600:8600/udp"
+    environment:
+      - 'CONSUL_LOCAL_CONFIG={"disable_update_check": true}'
+      - "CONSUL_BIND_INTERFACE=eth0"
+  # consul2:
+  #   image: "consul"
+  #   container_name: "consul2"
+  #   networks:
+  #     - consul-network
+  #   hostname: "consul2"
+  #   ports:
+  #     - "8400"
+  #     - "8500"
+  #     - "8600"
+  #   command: "agent -server -retry-join consul"
+  #   depends_on:
+  #     - consul
+  # consul3:
+  #   image: "consul"
+  #   container_name: "consul3"
+  #   networks:
+  #     - consul-network
+  #   hostname: "consul3"
+  #   ports:
+  #     - "8400"
+  #     - "8500"
+  #     - "8600"
+  #   command: "agent -server -retry-join consul"
+  #   depends_on:
+  #     - consul
   postgres:
     image: postgres
     restart: always
@@ -27,23 +56,23 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       PGDATA: /var/lib/postgresql/data/pgdata
-  registrator:
-    image: gliderlabs/registrator
-    volumes:
-      - "/var/run/docker.sock:/tmp/docker.sock"
-    networks:
-      - consul-network
-    command: -ip 172.17.0.1 consul://consul:8500
-    links:
-      - consul
-    environment:
-      SERVICE_NAME: registrator
-    restart: always
-  # nodeapi:
-  #   build: ./services/node-api/
+  # registrator:
+  #   image: gliderlabs/registrator
+  #   volumes:
+  #     - "/var/run/docker.sock:/tmp/docker.sock"
   #   networks:
   #     - consul-network
-  #   ports:
-  #     - "3000:3000"
+  #   command: -ip 172.17.0.1 consul://consul:8500
   #   links:
-  #     - "consul:consul"
+  #     - consul
+  #   environment:
+  #     SERVICE_NAME: registrator
+  #   restart: always
+  nodeapi:
+    build: ./services/node-api/
+    networks:
+      - consul-network
+    ports:
+      - "3000:3000"
+    links:
+      - "consul:consul"

@@ -4,7 +4,9 @@ var express = require("express"),
   bodyParser = require("body-parser");
 const { Client } = require("pg");
 
-const consul = require("consul")();
+const consul = require("consul")({
+  host: "172.18.0.2"
+});
 const CONSUL_ID = require("uuid/v4")();
 
 //Setup server
@@ -62,7 +64,7 @@ const options = {
   name: "node-api",
   // Works if we pass in the node id from the consul ui => '172.21.0.2'
   // and not using docker to run nodejs
-  address: process.env.ADDRESS || "0.0.0.0:8500",
+  //address: "127.18.0.2",
   // port: 8500,
   id: CONSUL_ID,
   check: {
