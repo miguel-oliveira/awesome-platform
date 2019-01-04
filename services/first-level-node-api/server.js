@@ -21,6 +21,7 @@ var options = {
 var tracer = initTracer(config, options);
 
 // rest of your code
+const { FORMAT_HTTP_HEADERS } = require("opentracing");
 const express = require("express");
 const request = require("request");
 const consul = require("consul")({
@@ -59,6 +60,9 @@ app.route("/foo").get(function(req, res) {
       headers: req.headers
     };
     span.log({ calling: options.url });
+
+    tracer.inject(span, FORMAT_HTTP_HEADERS, options.headers);
+
     request(options, (err, result, body) => {
       if (err) {
         throw new Error(err);

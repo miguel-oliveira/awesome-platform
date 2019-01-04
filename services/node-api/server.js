@@ -1,9 +1,31 @@
+var initTracer = require("jaeger-client").initTracer;
+
+// See schema https://github.com/jaegertracing/jaeger-client-node/blob/master/src/configuration.js#L37
+var config = {
+  serviceName: "node-api",
+  reporter: {
+    logSpans: true,
+    agentHost: "172.18.0.4",
+    agentPort: 6832
+  },
+  sampler: {
+    type: "probabilistic",
+    param: 1.0
+  }
+};
+var jaegerOptions = {
+  tags: {
+    "node-api.version": "1.0.0"
+  }
+};
+var tracer = initTracer(config, jaegerOptions);
 var express = require("express"),
   app = express(),
   port = process.env.PORT || 3000,
   bodyParser = require("body-parser");
 const { Client } = require("pg");
 var os = require("os");
+const { FORMAT_HTTP_HEADERS } = require("opentracing");
 
 var networkInterfaces = os.networkInterfaces();
 
@@ -18,7 +40,7 @@ const CONSUL_ID = require("uuid/v4")();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-async function getDataFromDB(res) {
+async function getDataFromDB(res, span) {
   const conn = {
     user: "postgres",
     host: known_data_instances[0].Service.Address,
@@ -32,15 +54,24 @@ async function getDataFromDB(res) {
   await client.connect();
 
   const result = await client.query("SELECT * FROM public.clients");
+  span.log({ event: "data_received", data: result.rows.length });
   res.json(result.rows.length);
+  span.finish();
   await client.end();
 }
 
 app.route("/foo").get(function(req, res) {
+  const parentSpanContext = tracer.extract(FORMAT_HTTP_HEADERS, req.headers);
+  const span = tracer.startSpan("http_server", {
+    childOf: parentSpanContext
+  });
+
+  span.log({ calling: "/foo" });
   if (!known_data_instances.length) {
+    span.finish();
     res.json("Can't find POSTGRES service");
   } else {
-    getDataFromDB(res);
+    getDataFromDB(res, span);
   }
 });
 
