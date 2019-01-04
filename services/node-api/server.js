@@ -3,6 +3,11 @@ var express = require("express"),
   port = process.env.PORT || 3000,
   bodyParser = require("body-parser");
 const { Client } = require("pg");
+var os = require("os");
+
+var networkInterfaces = os.networkInterfaces();
+
+console.log(networkInterfaces.eth0[0].address);
 
 const consul = require("consul")({
   host: "172.18.0.2"
@@ -32,7 +37,11 @@ async function getDataFromDB(res) {
 }
 
 app.route("/foo").get(function(req, res) {
-  getDataFromDB(res);
+  if (!known_data_instances.length) {
+    res.json("Can't find POSTGRES service");
+  } else {
+    getDataFromDB(res);
+  }
 });
 
 app.listen(port);
@@ -64,8 +73,8 @@ const options = {
   name: "node-api",
   // Works if we pass in the node id from the consul ui => '172.21.0.2'
   // and not using docker to run nodejs
-  //address: "127.18.0.2",
-  // port: 8500,
+  address: networkInterfaces.eth0[0].address,
+  port: 3000,
   id: CONSUL_ID,
   check: {
     ttl: "10s",

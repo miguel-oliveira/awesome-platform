@@ -33,8 +33,11 @@ const options = {
   port: 5432,
   id: CONSUL_ID,
   check: {
-    ttl: "10s",
-    deregister_critical_service_after: "1m"
+    id: "ssh",
+    name: "SSH TCP on port 22",
+    tcp: "172.18.0.3:5432",
+    interval: "10s",
+    timeout: "1s"
   }
 };
 
@@ -44,24 +47,24 @@ consul.agent.service.register(options, err => {
     return;
   }
   // schedule heartbeat
-  setInterval(() => {
-    checkDBIsOnline(
-      () => {
-        consul.agent.check.pass({ id: `service:${CONSUL_ID}` }, err => {
-          if (err) {
-            throw new Error(err);
-          }
-          console.log("told Consul that POSTGRES is HEALTHY 👍");
-        });
-      },
-      () => {
-        consul.agent.check.fail({ id: `service:${CONSUL_ID}` }, err => {
-          if (err) {
-            throw new Error(err);
-          }
-          console.log("told Consul that POSTGRES is DOWN 👎");
-        });
-      }
-    );
-  }, 10 * 1000);
+  // setInterval(() => {
+  //   checkDBIsOnline(
+  //     () => {
+  //       consul.agent.check.pass({ id: `service:${CONSUL_ID}` }, err => {
+  //         if (err) {
+  //           throw new Error(err);
+  //         }
+  //         console.log("told Consul that POSTGRES is HEALTHY 👍");
+  //       });
+  //     },
+  //     () => {
+  //       consul.agent.check.fail({ id: `service:${CONSUL_ID}` }, err => {
+  //         if (err) {
+  //           throw new Error(err);
+  //         }
+  //         console.log("told Consul that POSTGRES is DOWN 👎");
+  //       });
+  //     }
+  //   );
+  // }, 10 * 1000);
 });

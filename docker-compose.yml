@@ -3,12 +3,17 @@ version: "2"
 networks:
   consul-network:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+          gateway: 172.18.0.1
 
 services:
   consul:
     image: consul:latest
     networks:
-      - consul-network
+      consul-network:
+        ipv4_address: 172.18.0.2
     ports:
       - "8300:8300"
       - "8301:8301"
@@ -19,6 +24,8 @@ services:
     environment:
       - 'CONSUL_LOCAL_CONFIG={"disable_update_check": true}'
       - "CONSUL_BIND_INTERFACE=eth0"
+    volumes:
+      - "./consul-service-configs/:/consul/config/"
   # consul2:
   #   image: "consul"
   #   container_name: "consul2"
@@ -49,7 +56,8 @@ services:
     image: postgres
     restart: always
     networks:
-      - consul-network
+      consul-network:
+        ipv4_address: 172.18.0.3
     volumes:
       - /usr/local/var/postgres:/var/lib/postgresql/data/pgdata
     ports:
@@ -60,15 +68,15 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     depends_on:
       - consul
-  postgresproxy:
-    build: ./services/postgres-proxy/
-    networks:
-      - consul-network
-    links:
-      - "consul:consul"
-      - "postgres:postgres"
-    depends_on:
-      - postgres
+  # postgresproxy:
+  #   build: ./services/postgres-proxy/
+  #   networks:
+  #     - consul-network
+  #   links:
+  #     - "consul:consul"
+  #     - "postgres:postgres"
+  #   depends_on:
+  #     - postgres
   # registrator:
   #   image: gliderlabs/registrator
   #   volumes:
@@ -91,4 +99,31 @@ services:
       - "consul:consul"
     depends_on:
       - consul
-      - postgresproxy
+      - postgres
+  firstlevelapi:
+    build: ./services/first-level-node-api/
+    networks:
+      - consul-network
+    ports:
+      - "3001:3001"
+    links:
+      - "consul:consul"
+    depends_on:
+      - consul
+      - nodeapi
+  jaeger:
+    image: jaegertracing/all-in-one
+    networks:
+      consul-network:
+        ipv4_address: 172.18.0.4
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "9411:9411"
+    depends_on:
+      - consul
+      - postgres
