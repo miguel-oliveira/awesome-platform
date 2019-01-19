@@ -30,7 +30,8 @@ services:
   #   image: "consul"
   #   container_name: "consul2"
   #   networks:
-  #     - consul-network
+  #     consul-network:
+  #       ipv4_address: 172.18.0.5
   #   hostname: "consul2"
   #   ports:
   #     - "8400"
@@ -43,7 +44,8 @@ services:
   #   image: "consul"
   #   container_name: "consul3"
   #   networks:
-  #     - consul-network
+  #     consul-network:
+  #       ipv4_address: 172.18.0.6
   #   hostname: "consul3"
   #   ports:
   #     - "8400"

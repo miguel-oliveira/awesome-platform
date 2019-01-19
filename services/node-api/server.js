@@ -1,5 +1,4 @@
 var initTracer = require("jaeger-client").initTracer;
-
 // See schema https://github.com/jaegertracing/jaeger-client-node/blob/master/src/configuration.js#L37
 var config = {
   serviceName: "node-api",
@@ -19,10 +18,10 @@ var jaegerOptions = {
   }
 };
 var tracer = initTracer(config, jaegerOptions);
-var express = require("express"),
-  app = express(),
-  port = process.env.PORT || 3000,
-  bodyParser = require("body-parser");
+var express = require("express");
+var app = express();
+var port = process.env.PORT || 3000;
+var bodyParser = require("body-parser");
 const { Client } = require("pg");
 var os = require("os");
 const { FORMAT_HTTP_HEADERS } = require("opentracing");

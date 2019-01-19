@@ -24,3 +24,4 @@ multi-cloud platform playground
 - Consul Telemetry: https://www.consul.io/docs/agent/telemetry.html 
 - Jeager Client Node: https://github.com/jaegertracing/jaeger-client-node
 - Open Tracing Javascript: https://github.com/opentracing/opentracing-javascript
+- Distributed Tracing with NodeJS: https://blog.risingstack.com/distributed-tracing-opentracing-node-js/
