@@ -129,3 +129,12 @@ services:
     depends_on:
       - consul
       - postgres
+  redis:
+    image: "bitnami/redis:latest"
+    networks:
+      consul-network:
+        ipv4_address: 172.18.0.5
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
+    ports:
+      - "6379:6379"
