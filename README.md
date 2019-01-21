@@ -30,4 +30,6 @@ multi-cloud platform playground
 - Jeager Client Node: https://github.com/jaegertracing/jaeger-client-node
 - Open Tracing Javascript: https://github.com/opentracing/opentracing-javascript
 - Distributed Tracing with NodeJS: https://blog.risingstack.com/distributed-tracing-opentracing-node-js/
+- Open Tracing with Spring Boot (Jeager and Zipkin): https://dzone.com/articles/opentracing-spring-boot-instrumentation
+- Open Tracing with Spring Boot example: https://github.com/pavolloffay/opentracing-java-examples/tree/master/spring-boot
 - Spring Boot Cache with Redis: https://medium.com/@MatthewFTech/spring-boot-cache-with-redis-56026f7da83a (note: the tutorial is missing the @EnableCaching decorator in the Application class)
