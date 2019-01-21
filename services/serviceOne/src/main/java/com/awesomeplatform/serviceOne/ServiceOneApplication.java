@@ -1,10 +1,11 @@
 package com.awesomeplatform.serviceOne;
 
+
 import com.uber.jaeger.Configuration;
 import com.uber.jaeger.samplers.ProbabilisticSampler;
+import io.opentracing.Tracer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
@@ -12,7 +13,7 @@ import org.springframework.context.annotation.Bean;
 public class ServiceOneApplication {
 
 	@Bean
-	public io.opentracing.Tracer jaegerTracer() {
+	public Tracer jaegerTracer() {
 		return new Configuration("Service One", new Configuration.SamplerConfiguration(ProbabilisticSampler.TYPE, 1),
 				new Configuration.ReporterConfiguration())
 				.getTracer();

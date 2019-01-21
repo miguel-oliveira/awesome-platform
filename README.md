@@ -11,7 +11,7 @@ multi-cloud platform playground
 ### Distributed Tracing
 
 - instrumentation is laborious but can be abstracted.
-- **TODO**: The Jaeger Spring Boot client gives **all** instrumentation for free. Need to test it.
+- The Open Tracing Spring Boot client gives **all** instrumentation for free.
 - integration of the in-built tracing information with something like prometheus can be explored. The consul telemetry documentation mentions the following with this regard: "Additionally, if the telemetry configuration options are provided, the telemetry information will be streamed to a statsite or statsd server where it can be aggregated and flushed to Graphite or any other metrics store. This information can also be viewed with the metrics endpoint in JSON format or using Prometheus format."
 - also refer consul.http.<verb>.<path> under the Metrics Reference section in the consul telemetry documentation.
 
