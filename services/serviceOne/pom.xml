@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.awesomeplatform</groupId>
-	<artifactId>serviceOne</artifactId>
+	<artifactId>guitarManager</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>serviceOne</name>
+	<name>guitarManager</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
