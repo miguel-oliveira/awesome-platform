@@ -1,0 +1,12 @@
+spring.cloud.consul:
+  host: localhost
+  port: 8500
+  config:
+    enabled: true   
+      
+spring.cloud.vault:
+  uri: http://localhost:8200
+  token: s.amN7bdBPgLsML7lmJVCmd0X1
+  generic:
+    enabled: true
+    application-name: Consul-Spring-Integration-Demo

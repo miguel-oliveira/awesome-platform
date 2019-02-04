@@ -33,3 +33,8 @@ multi-cloud platform playground
 - Open Tracing with Spring Boot (Jeager and Zipkin): https://dzone.com/articles/opentracing-spring-boot-instrumentation
 - Open Tracing with Spring Boot example: https://github.com/pavolloffay/opentracing-java-examples/tree/master/spring-boot
 - Spring Boot Cache with Redis: https://medium.com/@MatthewFTech/spring-boot-cache-with-redis-56026f7da83a (note: the tutorial is missing the @EnableCaching decorator in the Application class)
+- Guetting Started with Consul: https://learn.hashicorp.com/consul/?track=getting-started#getting-started
+- Spring Consul Guide: https://www.baeldung.com/spring-cloud-consul
+- BootStrapping the Consul ACL System: https://learn.hashicorp.com/consul/advanced/day-1-operations/acl-guide
+- Getting Started with Vault: https://learn.hashicorp.com/vault/?track=getting-started#getting-started
+- Spring Vault Guide: https://www.baeldung.com/spring-cloud-vault
